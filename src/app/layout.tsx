@@ -1,5 +1,7 @@
+import '../styles/globals.css'
+
 export const metadata = {
-  title: "Meu App",
+  title: "Gerenciador de Tarefas",
   description: "Sistema de login",
 };
 
