@@ -3,7 +3,7 @@ import { DefaultButton } from "../DefaultButton";
 import { DefaultInput } from "../DefaultInput";
 
 
-export function MainForm() {
+export function LoginForm() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -12,8 +12,8 @@ export function MainForm() {
     const passwordRef = useRef<HTMLInputElement>(null)
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=> {
-
         
+
         e.preventDefault();
     }
     return (
@@ -37,6 +37,7 @@ export function MainForm() {
                 </div>
                 <div>
                     <DefaultButton
+                       text="Entrar"
                         type="button"
                     >
                     </DefaultButton>
