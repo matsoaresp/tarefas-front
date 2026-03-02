@@ -1,8 +1,7 @@
 'use client';
 import { useState} from "react";
 import { toast } from 'sonner';
-import { Container } from "../components/Container/Container";
-import { LoginForm } from "../components/LoginForm";
+import { LoginForm } from "../login/components/LoginForm";
 
 
 
@@ -34,12 +33,9 @@ export default function Regiser() {
 
     }
     return (
-        <div>
-               <Container>
                 <LoginForm>
 
                 </LoginForm>
-                </Container> 
-        </div>
+    
     );
 }
