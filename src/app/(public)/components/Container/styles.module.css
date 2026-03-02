@@ -1,0 +1,17 @@
+.container {   
+    margin: 0 auto;
+}
+
+.content {
+    margin: 2rem;
+}
+
+.container-fluid {
+    max-width: auto;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

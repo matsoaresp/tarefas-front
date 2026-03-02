@@ -1,17 +1,17 @@
-import style from "./style.module.css"
-
+import style from "./styles.module.css"
 
 type DefaultButtonProps = {
+    text: string;
     color?: 'green' | 'red';
 } & React.ComponentProps<'button'>;
 
-export function DefaultButton({ color = 'green', ...props }: DefaultButtonProps) {
+export function DefaultButton({ color = 'green', text,...props }: DefaultButtonProps) {
 
     return (
         <div>
             <button className={`${style.button} ${style[color]}`}  {...props} >
                 
-            </button>
+            {text}</button>
         </div>
     )
 
