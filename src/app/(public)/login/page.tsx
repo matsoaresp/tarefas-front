@@ -1,10 +1,7 @@
 'use client';
 import { useState} from "react";
 import { toast } from 'sonner';
-import { Container } from "../components/Container/Container";
-import { LoginForm} from "../components/LoginForm";
-
-
+import { LoginForm} from "./components/LoginForm";
 
 export default function Login() {
     
@@ -26,10 +23,10 @@ export default function Login() {
         }
     }
     return (
-               <Container>
+            
                 <LoginForm>
 
                 </LoginForm>
-                </Container> 
+                
     );
 }
