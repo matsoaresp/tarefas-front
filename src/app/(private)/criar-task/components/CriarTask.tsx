@@ -24,7 +24,7 @@ export function CriarTask() {
     }, [])
 
 
-    const handleClick = () => {
+    const handleAddTask = () => {
 
         if(!name.trim() || !descricao.trim()) return
 
@@ -42,6 +42,13 @@ export function CriarTask() {
 
         setName("")
         setDescricao("")
+    }
+
+    const handleRemoveTask = (id: number) => {
+        const updatedTasks = tasks.filter(task => task.id !== id)
+
+        setTasks(updatedTasks)
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks))
     }
 
     return (
@@ -63,7 +70,7 @@ export function CriarTask() {
             />
             <button
                 type="button"
-                onClick={handleClick}
+                onClick={handleAddTask}
             >Enviar
             </button>
 
@@ -72,6 +79,13 @@ export function CriarTask() {
                     <li key={task.id}>
                         <strong>{task.name}</strong>
                         <p>{task.descricao}</p>
+
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveTask(task.id)}
+                        >
+                            Excluir
+                        </button>
                     </li>
                 ))}
             </ul>
