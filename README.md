@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 Gerenciador de Tarefas
 
-## Getting Started
+Aplicação web desenvolvida com **Next.js (App Router)** para gerenciamento de tarefas, permitindo criar, listar, editar e excluir registros com persistência local utilizando `localStorage`. O projeto irá evoluir para utilizar banco de dados e autenticação 
 
-First, run the development server:
+Este projeto foi inicializado com `create-next-app` e tem como foco o aprendizado de arquitetura moderna com App Router, componentização e tipagem com TypeScript.
+
+---
+
+## 🚀 Demonstração
+
+Após iniciar o servidor de desenvolvimento, acesse:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🎯 Funcionalidades
+
+- ✅ Criar tarefa (nome e descrição)
+- ✅ Listar tarefas dinamicamente
+- ✅ Editar tarefa existente
+- ✅ Excluir tarefa
+- ✅ Persistência de dados no navegador
+- ✅ Atualização reativa da interface
+- ✅ Tipagem forte com TypeScript
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Next.js (App Router)**
+- **React**
+- **TypeScript**
+- **LocalStorage (API do navegador)**
+
+---
+
+## 📂 Estrutura do Projeto
+
+```bash
+src/
+ ├── app/
+ │    ├── (private)/
+ │    │     └── criar-task/
+ │    │           ├── page.tsx
+ │    │           └── components/
+ │    │                └── CriarTask.tsx
+ ├── public/
+ ├── package.json
+ └── tsconfig.json
+```
+
+### 📌 Organização
+
+- `page.tsx` → Define a rota da aplicação.
+- `CriarTask.tsx` → Componente Client responsável pela lógica das tarefas.
+---
+
+## ⚙️ Como Executar o Projeto
+
+### 1️⃣ Instalar dependências
+
+```bash
+npm install
+```
+
+### 2️⃣ Rodar o servidor de desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ou, se preferir:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev
+```
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### 3️⃣ Abrir no navegador
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💾 Persistência de Dados
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+O projeto utiliza `localStorage` para armazenar as tarefas:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```ts
+localStorage.setItem("tasks", JSON.stringify(tasks))
+```
+
+### ⚠️ Limitações
+
+- Os dados são armazenados apenas no navegador atual.
+- Não há sincronização entre dispositivos.
+- Não há autenticação ou controle de usuários.
+
+---
+
+## 🧠 Conceitos Aplicados
+
+- Componentes Client no App Router
+- Hook `useState` para gerenciamento de estado
+- Hook `useEffect` para sincronização inicial
+- Tipagem com `type` no TypeScript
+- Manipulação de arrays com:
+  - `map()`
+  - `filter()`
+  - Spread operator (`...`)
+
+---
+
+## 📈 Possíveis Melhorias Futuras
+
+- 🔐 Implementar autenticação de usuários
+- 🗄️ Integrar banco de dados (PostgreSQL ou MongoDB)
+- 🌐 Criar rotas de API (`/api/tasks`)
+- 🎨 Implementar estilização com Tailwind CSS
+- 🧪 Adicionar testes automatizados
+- ☁️ Deploy em ambiente de produção
+
+---
+
+
+## 📚 Referências
+
+- Documentação oficial do Next.js: https://nextjs.org/docs
+- Guia do App Router: https://nextjs.org/docs/app
+- Plataforma de deploy: https://vercel.com
+
+---
+
+## 👨‍💻 Autor
+Projeto desenvolvido para fins de estudo e prática em desenvolvimento frontend com foco em arquitetura moderna utilizando Next.js e TypeScript.
+
+Mateus Soares Prado
