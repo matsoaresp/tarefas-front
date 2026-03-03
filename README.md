@@ -107,19 +107,6 @@ localStorage.setItem("tasks", JSON.stringify(tasks))
 
 ---
 
-## 🧠 Conceitos Aplicados
-
-- Componentes Client no App Router
-- Hook `useState` para gerenciamento de estado
-- Hook `useEffect` para sincronização inicial
-- Tipagem com `type` no TypeScript
-- Manipulação de arrays com:
-  - `map()`
-  - `filter()`
-  - Spread operator (`...`)
-
----
-
 ## 📈 Possíveis Melhorias Futuras
 
 - 🔐 Implementar autenticação de usuários
@@ -128,15 +115,6 @@ localStorage.setItem("tasks", JSON.stringify(tasks))
 - 🎨 Implementar estilização com Tailwind CSS
 - 🧪 Adicionar testes automatizados
 - ☁️ Deploy em ambiente de produção
-
----
-
-
-## 📚 Referências
-
-- Documentação oficial do Next.js: https://nextjs.org/docs
-- Guia do App Router: https://nextjs.org/docs/app
-- Plataforma de deploy: https://vercel.com
 
 ---
 
