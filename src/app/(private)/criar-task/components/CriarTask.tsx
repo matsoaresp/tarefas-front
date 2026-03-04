@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 
 interface Task {
@@ -24,6 +25,20 @@ export function CriarTask() {
   const handleRemoveTask = (id: number) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
+
+  const handleUpdateTask =  (id: number) => {
+    setTasks(prev => {
+      const updated = prev.map(task =>
+        task.id === id ? {...task, name, descricao} : task
+      );
+
+      localStorage.setItem("tasks", JSON.stringify(updated));
+      return updated
+    });
+
+    setName("")
+    setDescricao("")
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center py-16 px-4 sm:px-6 font-sans">
@@ -110,17 +125,31 @@ export function CriarTask() {
                     )}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTask(task.id)}
+                  
+                     <button
+  type="button"
+  onClick={() => handleRemoveTask(task.id)}
+  className="text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-100"
+  aria-label="Excluir tarefa"
+>
+  {/* Ícone X */}
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+</button>
 
-                    className="text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-100"
-                    aria-label="Excluir tarefa"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+<button
+  type="button"
+  onClick={() => handleUpdateTask(task.id)}
+  className="text-gray-500 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-100"
+  aria-label="Editar tarefa"
+>
+  {/* Ícone Lápis */}
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536a4 4 0 01-1.414.94L8 18l.524-3.122A4 4 0 019 13z" />
+  </svg>
+</button>
+                  
                 </li>
               ))}
             </ul>
