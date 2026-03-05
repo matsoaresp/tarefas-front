@@ -31,6 +31,10 @@ export function LoginForm() {
         }
 
         toast.success('Login realizado com sucesso!')
+        setTimeout(() => {
+            console.log("Redirecionando para pagina de tarefas")
+            router.push("/criar-task")
+        }, 1500)
     };
 
 
