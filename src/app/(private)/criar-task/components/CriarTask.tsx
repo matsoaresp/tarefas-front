@@ -10,35 +10,60 @@ interface Task {
 export function CriarTask() {
   const [name, setName] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [isEditing, setIsEditing] = useState<number | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const handleAddTask = () => {
-    if(!name.trim()) return;
-    setTasks((prev) => [
-      ...prev,
+    if (!name.trim()) return;
+
+    const newTasks = [
+      ...tasks,
       { id: Date.now(), name: name.trim(), descricao: descricao.trim() },
-    ]);
+    ];
+
+    setTasks(newTasks);
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
+
     setName("");
     setDescricao("");
   };
 
   const handleRemoveTask = (id: number) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    const updated = tasks.filter((t) => t.id !== id);
+    setTasks(updated);
+    localStorage.setItem("tasks", JSON.stringify(updated));
   };
 
-  const handleUpdateTask =  (id: number) => {
-    setTasks(prev => {
-      const updated = prev.map(task =>
-        task.id === id ? {...task, name, descricao} : task
-      );
+  const handleSaveEdit = (id: number) => {
+    const updated = tasks.map((task) =>
+      task.id === id ? { ...task, name, descricao } : task
+    );
 
-      localStorage.setItem("tasks", JSON.stringify(updated));
-      return updated
-    });
+    setTasks(updated);
+    localStorage.setItem("tasks", JSON.stringify(updated));
 
-    setName("")
-    setDescricao("")
-  }
+    setName("");
+    setDescricao("");
+    setIsEditing(null);
+  };
+
+  const handleUpdateTask = (id: number) => {
+    const task = tasks.find((t) => t.id === id);
+
+    if (task) {
+      setName(task.name);
+      setDescricao(task.descricao);
+      setIsEditing(id);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (isEditing !== null) {
+      handleSaveEdit(isEditing);
+    } else {
+      handleAddTask();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center py-16 px-4 sm:px-6 font-sans">
@@ -83,26 +108,23 @@ export function CriarTask() {
 
             <button
               type="button"
-              onClick={handleAddTask}
-              className="bg-gray-900 text-white font-medium  h-11 w-full rounded-xl hover:bg-gray-800 active:scale-[0.98] transition-all mt-2 shadow-sm"
+              onClick={handleSubmit}
+              className="bg-gray-900 text-white font-medium h-11 w-full rounded-xl hover:bg-gray-800 active:scale-[0.98] transition-all mt-2 shadow-sm"
             >
-              Adicionar tarefa
+              {isEditing !== null ? "Atualizar tarefa" : "Adicionar tarefa"}
             </button>
           </div>
         </div>
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <h2 className=" font-semibold text-gray-900 tracking-tight">
+            <h2 className="font-semibold text-gray-900 tracking-tight">
               Lista
             </h2>
           </div>
 
           {tasks.length === 0 ? (
             <div className="border border-dashed border-gray-300 rounded-2xl py-14 flex flex-col items-center gap-3 bg-gray-50/50">
-              <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
               <p className="text-2xl text-gray-500 font-medium">
                 Nenhuma tarefa por aqui ainda.
               </p>
@@ -112,44 +134,34 @@ export function CriarTask() {
               {tasks.map((task) => (
                 <li
                   key={task.id}
-                  className="bg-white border border-gray-100 rounded-xl px-5 py-4 flex justify-between items-start gap-4 group hover:border-gray-200 hover:shadow-sm transition-all"
+                  className="bg-white border border-gray-100 rounded-xl px-5 py-4 flex justify-between items-start gap-4"
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-gray-900 truncate">
+                  <div className="flex-1">
+                    <div className="font-semibold text-gray-900">
                       {task.name}
                     </div>
                     {task.descricao && (
-                      <div className="text-gray-500 mt-1 line-clamp-2">
+                      <div className="text-gray-500 mt-1">
                         {task.descricao}
                       </div>
                     )}
                   </div>
 
-                  
-                     <button
-  type="button"
-  onClick={() => handleRemoveTask(task.id)}
-  className="text-gray-500 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-100"
-  aria-label="Excluir tarefa"
->
-  {/* Ícone X */}
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-  </svg>
-</button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTask(task.id)}
+                    className="text-gray-500 hover:text-red-600"
+                  >
+                    ❌
+                  </button>
 
-<button
-  type="button"
-  onClick={() => handleUpdateTask(task.id)}
-  className="text-gray-500 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-100"
-  aria-label="Editar tarefa"
->
-  {/* Ícone Lápis */}
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2.5 2.5 0 113.536 3.536L12.536 16.536a4 4 0 01-1.414.94L8 18l.524-3.122A4 4 0 019 13z" />
-  </svg>
-</button>
-                  
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateTask(task.id)}
+                    className="text-gray-500 hover:text-blue-600"
+                  >
+                    ✏️
+                  </button>
                 </li>
               ))}
             </ul>
