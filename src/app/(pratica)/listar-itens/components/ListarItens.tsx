@@ -35,6 +35,40 @@ export function ListarItens() {
         localStorage.setItem("itens", JSON.stringify(remove))
 
     }
+
+    const handleUpdateItens = (id: number) => {
+
+        const item = itens.find((t) => t.id === id)
+
+        if (item) {
+            setName(item.name);
+            setDescription(item.description);
+            setIsEditing(id);
+        }
+    };
+
+    const handleSaveItem = (id:number) => {
+
+        const updated = itens.map((item) =>
+            item.id === id ? {...item, name, description} : item);
+
+        setItens(updated);
+        localStorage.setItem("itens", JSON.stringify(updated));
+
+        setName("")
+        setDescription("")
+        setIsEditing(null)
+    }
+
+    const handleSubmit = () => {
+
+        if(isEditing !== null){
+            handleSaveItem(isEditing);
+        }else {
+            handleAddItens();
+        }
+        
+    }
     return (
         <div>
             <div>
@@ -59,9 +93,9 @@ export function ListarItens() {
 
                 <div>
                     <button
-                        onClick={() => handleAddItens()}
+                        onClick={handleSubmit}
                     >
-                        Adicionar
+                        {isEditing !== null ? "Atualizar tarefa" : "Aditionar tarefa"}
                     </button>
                 </div>
             <div>
@@ -98,6 +132,13 @@ export function ListarItens() {
                     onClick={() => handleRemoveItens(item.id)}
                     >
                         Remover
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => handleUpdateItens(item.id)}
+                    >
+                        Atualizar
                     </button>
 
                         </li>
