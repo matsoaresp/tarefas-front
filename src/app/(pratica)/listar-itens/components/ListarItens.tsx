@@ -28,7 +28,13 @@ export function ListarItens() {
         setDescription("");
     }
 
+    const handleRemoveItens = (id: number) => {
 
+        const remove = itens.filter((i) => i.id !== id)
+        setItens(remove)
+        localStorage.setItem("itens", JSON.stringify(remove))
+
+    }
     return (
         <div>
             <div>
@@ -49,6 +55,15 @@ export function ListarItens() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 type="text" />
+
+
+                <div>
+                    <button
+                        onClick={() => handleAddItens()}
+                    >
+                        Adicionar
+                    </button>
+                </div>
             <div>
 
                 <div>
@@ -58,15 +73,38 @@ export function ListarItens() {
                         </h2>
                     </div>
 
-                    
+                  {itens.length === 0 ? (
+                    <div>
+                        <p>Nenhum item por aqui ainda</p>
+                    </div>
+                  ): (
+                    <ul>    
+                    {itens.map((item) => (
+                        <li
+                            key={item.id}
+                        >
+                        <div>
+                        <div>
+                            {item.name}
+                        </div>
+                        <div>
+                            {item.description}
+                        </div>
+                        </div>
 
 
-                    <button
-                        type="button"
-                        onClick={() => handleAddItens()}
+                        <button
+                    type="button"
+                    onClick={() => handleRemoveItens(item.id)}
                     >
-                        Adicionar
+                        Remover
                     </button>
+
+                        </li>
+                    ))}
+
+                    </ul>
+                  )}
                 </div>
             </div>
         </div>
