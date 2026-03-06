@@ -5,20 +5,22 @@ interface Itens {
     id: number;
     name: string;
     description: string;
+    completed: boolean;
 }
 
 export function ListarItens() {
-
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
     const [itens, setItens] = useState<Itens[]>([])
     const [isEditing, setIsEditing] = useState<number | null>(null)
 
     const handleAddItens = () => {
+        if (!name && !description) return
 
         const newItens = [
             ...itens,
-            { id: Date.now(), name: name.trim(), description: description.trim() },
+            { id: Date.now(), name: name.trim(), description: description.trim(), completed:false },
         ];
 
         setItens(newItens);
@@ -33,7 +35,6 @@ export function ListarItens() {
         const remove = itens.filter((i) => i.id !== id)
         setItens(remove)
         localStorage.setItem("itens", JSON.stringify(remove))
-
     }
 
     const handleUpdateItens = (id: number) => {
@@ -46,6 +47,13 @@ export function ListarItens() {
             setIsEditing(id);
         }
     };
+
+    const filterItens = itens.filter((item) => {
+
+        if (filter === "completed") return item.completed === true;
+        if (filter === "pending") return item.completed === false;
+        return true;
+    });
 
     const handleSaveItem = (id:number) => {
 
@@ -67,10 +75,20 @@ export function ListarItens() {
         }else {
             handleAddItens();
         }
-        
+    }
+
+    const handleCompleted = (id: number) => {
+
+        const updated = itens.map((item) => 
+        item.id === id ? {...item,completed: !item.completed} : item
+    );
+
+        setItens(updated)
+       
     }
     return (
-        <div>
+        <div className="flex justify-center">
+            <div>
             <div>
                 <label htmlFor="">Nome do Item</label>
                 <input
@@ -80,9 +98,7 @@ export function ListarItens() {
                     type="text" />
             </div>
 
-            <div>
-
-            </div>
+            
             <label htmlFor="">Descrição do Item</label>
             <input
                 placeholder="Decrição do item"
@@ -95,8 +111,9 @@ export function ListarItens() {
                     <button
                         onClick={handleSubmit}
                     >
-                        {isEditing !== null ? "Atualizar tarefa" : "Aditionar tarefa"}
+                        {isEditing !== null ? "Atualizar tarefa" : "Adicionar tarefa"}
                     </button>
+                </div>
                 </div>
             <div>
 
@@ -114,25 +131,24 @@ export function ListarItens() {
                   ): (
                     <ul>    
                     {itens.map((item) => (
-                        <li
+                        <li className="flex gap-4 "
                             key={item.id}
                         >
-                        <div>
+
                         <div>
                             {item.name}
                         </div>
                         <div>
                             {item.description}
                         </div>
-                        </div>
-
-
+                        
                         <button
                     type="button"
                     onClick={() => handleRemoveItens(item.id)}
                     >
                         Remover
                     </button>
+                   
 
                     <button
                         type="button"
@@ -141,11 +157,35 @@ export function ListarItens() {
                         Atualizar
                     </button>
 
+                    <input type="checkbox"
+                    checked= {item.completed} 
+                    onChange={() => handleCompleted(item.id)}
+                    />
+
+                    <span>Concluído</span>
+
                         </li>
                     ))}
 
                     </ul>
                   )}
+
+                    
+                    <div className="flex gap-4">  
+                    <button onClick={() => setFilter("all")}>Todas</button>
+                    <button onClick={() => setFilter("completed")}>Concluídas</button>
+                    <button onClick={() => setFilter("pending")}>Pendentes</button>
+
+                    
+                    </div>
+
+                    <ul>
+                        {filterItens.map((item) => (
+                            <li key={item.id}>
+                                {item.name}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>
