@@ -4,10 +4,16 @@ import { useRouter } from "next/navigation";
 import { toast, Toaster } from 'sonner';
 
 
+interface User{
+    id: number;
+    name: string;
+    email: string;
+}
 export default function RegiserForm() {
     const router = useRouter();
     const [name, setName] = useState('')
     const [email, setEmail] = useState('');
+    const [users, setUsers] = useState<User[]>([])
     const [password, setPassword] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('')
 
@@ -37,6 +43,17 @@ export default function RegiserForm() {
             toast.error('As senhas não coincidem');
             return;
         }
+
+        const newUser = [
+            ...users,
+            {id: Date.now(), name: name.trim(), email: email.trim()}
+        ]
+        setUsers(newUser)
+        localStorage.setItem("users", JSON.stringify(newUser));
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmarSenha("");
 
         toast.success('Cadastro realizado com sucesso')
         setTimeout(() => {
