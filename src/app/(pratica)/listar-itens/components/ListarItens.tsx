@@ -14,6 +14,9 @@ export function ListarItens() {
     const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
     const [itens, setItens] = useState<Itens[]>([])
     const [isEditing, setIsEditing] = useState<number | null>(null)
+    const totalItens = itens.length;
+    const totalCompleted = itens.filter((item) => item.completed === true).length;
+    const totalPending = itens.filter((item) => item.completed === false).length;
 
     const handleAddItens = () => {
         if (!name && !description) return
@@ -186,6 +189,10 @@ export function ListarItens() {
                             </li>
                         ))}
                     </ul>
+
+                    <p>Total: {totalItens}</p>
+                    <p>Concluídos: {totalCompleted}</p>
+                    <p>Pendentes: {totalPending}</p>
                 </div>
             </div>
         </div>
