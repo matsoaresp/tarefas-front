@@ -37,7 +37,15 @@ export function BoxForm () {
         localStorage.setItem("produto", JSON.stringify(newProduct));
     }
 
-     useEffect(() =>{
+    const handleCompleted = (id: number) => {
+
+        const updated = produtos.map((item) => 
+        item.id === id ? {...item,comprado: !item.comprado } : item)
+
+        setProdutos(updated)
+    }
+
+    useEffect(() => {
 
             const data = localStorage.getItem("produto");
             if (data) {
@@ -84,6 +92,14 @@ export function BoxForm () {
                         {item.quantidade}
                     </span>
                     </div> 
+
+                    <div>
+                       <input 
+                       type="checkbox"
+                        checked= {item.comprado}
+                        onChange={()=> handleCompleted(item.id)}
+                       />
+                    </div>
             </li>
             )}
             </ul>
