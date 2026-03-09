@@ -1,6 +1,6 @@
 'use client';
 import { setRequestMeta } from "next/dist/server/request-meta";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Produto {
     id:number;
@@ -13,7 +13,7 @@ export function BoxForm () {
 
     const [nome, setNome] = useState("");
     const [quantidade, setQuantidade] = useState<number>(0);
-    const [produtos, setProduto] = useState<Produto[]>([]);
+    const [produtos, setProdutos] = useState<Produto[]>([]);
 
     const handleAddProduct = () => {
 
@@ -24,7 +24,7 @@ export function BoxForm () {
         if (quantidade <= 0 ){
             alert("Digite a quantidade do produto corretamente")
             return;
-        }
+        }       
 
         const newProduct = [
             ...produtos,
@@ -33,9 +33,16 @@ export function BoxForm () {
 
         setNome("")
         setQuantidade(0)
-        setProduto(newProduct);
+        setProdutos(newProduct);
         localStorage.setItem("produto", JSON.stringify(newProduct));
     }
+
+     useEffect(() =>{
+
+            const data = localStorage.getItem("produto");
+            if (data) {
+                setProdutos(JSON.parse(data))
+            }}, [])
     return (
         <div className="flex justify-center flex-column"> 
         <div>
@@ -63,7 +70,7 @@ export function BoxForm () {
             <button
             onClick={handleAddProduct}
             >Adicionar produto</button>
-
+            <ul>
             {produtos.map((item)=> 
             
             <li
@@ -78,8 +85,8 @@ export function BoxForm () {
                     </span>
                     </div> 
             </li>
-
             )}
+            </ul>
         </div>
         </div>
     )
