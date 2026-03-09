@@ -5,24 +5,34 @@ interface Itens {
   name: string;
   description: string;
   completed: boolean;
+  createdAt: string;
 }
 
 export function ListarItens() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
-  const [itens, setItens] = useState<Itens[]>([])
-  const [isEditing, setIsEditing] = useState<number | null>(null)
+  const [itens, setItens] = useState<Itens[]>([]);
+  const [isEditing, setIsEditing] = useState<number | null>(null);
   const totalItens = itens.length;
   const totalCompleted = itens.filter((item) => item.completed).length;
   const totalPending = itens.filter((item) => !item.completed).length;
 
   const handleAddItens = () => {
-    if (!name && !description) return
+    if (!name.trim()) {
+      alert("Digite um nome para a tarefa");
+      return
+    }
+
+    if (name.length > 30) {
+      alert("Nome muito grande")
+      return
+    }
 
     const newItens = [
       ...itens,
-      { id: Date.now(), name: name.trim(), description: description.trim(), completed:false },
+      { id: Date.now(), name: name.trim(), description: description.trim(), completed:false, createdAt: new Date().toLocaleDateString()},
     ];
 
     setItens(newItens);
@@ -165,6 +175,10 @@ export function ListarItens() {
 
                     <span className="text-sm text-gray-500">
                       {item.description}
+                    </span>
+
+                    <span className="text-sm text-gray-500">
+                      {`Criado em ${item.createdAt}`}
                     </span>
                   </div>
 

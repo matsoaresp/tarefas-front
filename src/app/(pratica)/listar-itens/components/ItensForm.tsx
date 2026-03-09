@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface Props  {
     handleSubmit: (name: string, description: string) => void;
     name: string;
