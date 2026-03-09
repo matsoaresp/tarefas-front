@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Itens {
   id: number;
@@ -11,13 +11,13 @@ interface Itens {
 export function ListarItens() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [createdAt, setCreatedAt] = useState("");
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [itens, setItens] = useState<Itens[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const totalItens = itens.length;
   const totalCompleted = itens.filter((item) => item.completed).length;
   const totalPending = itens.filter((item) => !item.completed).length;
+  const progress = totalItens === 0 ? 0 : (totalCompleted / totalItens) * 100;
 
   const handleAddItens = () => {
     if (!name.trim()) {
@@ -48,6 +48,39 @@ export function ListarItens() {
     localStorage.setItem("itens", JSON.stringify(remove))
   }
 
+   const handleIncompleteAllTasks = () => {
+    const incompleted = itens.map((item) =>
+    ({...item, completed: false}))
+
+    setItens(incompleted)
+    localStorage.setItem("itens", JSON.stringify(incompleted))
+  }
+
+  const cleanAllTasks = () => {
+
+
+    setItens([])
+    localStorage.removeItem("itens")
+
+  }
+
+  const handleCompleteAllTasks = () => {
+
+    const completed = itens.map((item) =>
+    ({...item, completed: true
+
+    }))
+
+    setItens(completed)
+    localStorage.setItem("itens", JSON.stringify(completed));
+  }
+
+  useEffect(() => {
+    const data = localStorage.getItem("itens");
+    if (data) {
+    setItens(JSON.parse(data));
+  }}, [])
+  
   const handleUpdateItens = (id: number) => {
     const item = itens.find((t) => t.id === id)
 
@@ -92,25 +125,7 @@ export function ListarItens() {
 
     setItens(updated)
   }
-
-  const handleCompleteAllTasks = () => {
-
-    const completed = itens.map((item) =>
-    ({...item, completed: true
-
-    }))
-
-    setItens(completed)
-    localStorage.setItem("itens", JSON.stringify(completed));
-  }
-
-  const handleIncompleteAllTasks = () => {
-    const incompleted = itens.map((item) =>
-    ({...item, completed: false}))
-
-    setItens(incompleted)
-    localStorage.setItem("itens", JSON.stringify(incompleted))
-  }
+ 
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center py-16 px-4">
@@ -182,15 +197,25 @@ export function ListarItens() {
 
           <button
             className="px-4 py-2 w-60 bg-red-600 text-white rounded-lg hover:bg-red-500 transition"
-            onClick={handleIncompleteAllTasks}
+            onClick={cleanAllTasks}
           >
-            Desmarcar todas
+            Limpar
           </button>
 
         </div>
 
         
         <div className="bg-white rounded-xl shadow p-4">
+
+          <div className="w-full bg-gray-200 rounded h-4">
+  <div
+    className="bg-green-500 h-4 rounded flex"
+    style={{ width: `${progress}%` }} 
+  >
+  </div>  
+</div>
+     <span>{Math.round(progress)}%</span>
+
           {filterItens.length === 0 ? (
             <p className="text-gray-500 text-center py-6">
               Nenhum item por aqui ainda
