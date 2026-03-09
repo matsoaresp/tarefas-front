@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Itens {
   id: number;
@@ -11,13 +11,13 @@ interface Itens {
 export function ListarItens() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [createdAt, setCreatedAt] = useState("");
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [itens, setItens] = useState<Itens[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const totalItens = itens.length;
   const totalCompleted = itens.filter((item) => item.completed).length;
   const totalPending = itens.filter((item) => !item.completed).length;
+  const progress = totalItens === 0 ? 0 : (totalCompleted / totalItens) * 100;
 
   const handleAddItens = () => {
     if (!name.trim()) {
@@ -48,6 +48,39 @@ export function ListarItens() {
     localStorage.setItem("itens", JSON.stringify(remove))
   }
 
+   const handleIncompleteAllTasks = () => {
+    const incompleted = itens.map((item) =>
+    ({...item, completed: false}))
+
+    setItens(incompleted)
+    localStorage.setItem("itens", JSON.stringify(incompleted))
+  }
+
+  const cleanAllTasks = () => {
+
+
+    setItens([])
+    localStorage.removeItem("itens")
+
+  }
+
+  const handleCompleteAllTasks = () => {
+
+    const completed = itens.map((item) =>
+    ({...item, completed: true
+
+    }))
+
+    setItens(completed)
+    localStorage.setItem("itens", JSON.stringify(completed));
+  }
+
+  useEffect(() => {
+    const data = localStorage.getItem("itens");
+    if (data) {
+    setItens(JSON.parse(data));
+  }}, [])
+  
   const handleUpdateItens = (id: number) => {
     const item = itens.find((t) => t.id === id)
 
@@ -92,6 +125,7 @@ export function ListarItens() {
 
     setItens(updated)
   }
+ 
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center py-16 px-4">
@@ -131,28 +165,57 @@ export function ListarItens() {
           </button>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+
           <button
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="px-4 py-2 w-20 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
             onClick={() => setFilter("all")}
           >
             Todas
           </button>
+
           <button
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="px-4 py-2  w-50 bg-green-600 text-white rounded-lg hover:bg-green-500 transition"
             onClick={() => setFilter("completed")}
           >
             Concluídas
           </button>
+
           <button
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="px-4 py-2 w-35 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400 transition"
             onClick={() => setFilter("pending")}
           >
             Pendentes
           </button>
+
+          <button
+            className="px-4 py-2 w-60 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition"
+            onClick={handleCompleteAllTasks}
+          >
+            Concluir todas
+          </button>
+
+          <button
+            className="px-4 py-2 w-60 bg-red-600 text-white rounded-lg hover:bg-red-500 transition"
+            onClick={cleanAllTasks}
+          >
+            Limpar
+          </button>
+
         </div>
 
+        
         <div className="bg-white rounded-xl shadow p-4">
+
+          <div className="w-full bg-gray-200 rounded h-4">
+  <div
+    className="bg-green-500 h-4 rounded flex"
+    style={{ width: `${progress}%` }} 
+  >
+  </div>  
+</div>
+     <span>{Math.round(progress)}%</span>
+
           {filterItens.length === 0 ? (
             <p className="text-gray-500 text-center py-6">
               Nenhum item por aqui ainda
