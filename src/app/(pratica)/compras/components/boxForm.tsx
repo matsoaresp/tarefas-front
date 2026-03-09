@@ -13,7 +13,11 @@ export function BoxForm () {
 
     const [nome, setNome] = useState("");
     const [quantidade, setQuantidade] = useState<number>(0);
+    const [filter, setFilter] = useState<"todos" | "comprado" | "pendente">("todos")
     const [produtos, setProdutos] = useState<Produto[]>([]);
+    const totalProdutos  = produtos.length;
+    const totalBuy = produtos.filter((produto) => produto.comprado).length;
+    const totalPending = produtos.filter((produto) => !produto.comprado).length;
 
     const handleAddProduct = () => {
 
@@ -118,6 +122,11 @@ export function BoxForm () {
             </li>
             )}
             </ul>
+            <div>
+                <span>Total: {totalProdutos}</span>
+                <span>Comprados: {totalBuy}</span>
+                <span>Pendentes: {totalPending}</span>
+            </div>
         </div>
         </div>
     )
