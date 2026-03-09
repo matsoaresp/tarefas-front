@@ -31,10 +31,18 @@ export function BoxForm () {
             {id: Date.now(), nome: nome.trim(), quantidade: quantidade, comprado: false},
         ];
 
-        setNome("")
-        setQuantidade(0)
+        setNome("");
+        setQuantidade(0);
         setProdutos(newProduct);
         localStorage.setItem("produto", JSON.stringify(newProduct));
+    }
+
+    const removeProduct = (id: number) => {
+
+        const remove = produtos.filter((item ) => item.id !== id)
+        setProdutos(remove)
+        localStorage.setItem("produto", JSON.stringify(remove))
+
     }
 
     const handleCompleted = (id: number) => {
@@ -99,6 +107,13 @@ export function BoxForm () {
                         checked= {item.comprado}
                         onChange={()=> handleCompleted(item.id)}
                        />
+                    </div>
+
+                    <div>
+                    <button
+                    type="button"
+                    onClick={() => removeProduct(item.id)}
+                    >Remover</button>
                     </div>
             </li>
             )}
