@@ -42,7 +42,6 @@ export function ComprasForm () {
             }
             :
             produto
-            
         )
         setProdutos(updated);
         localStorage.setItem("produto", JSON.stringify(updated));
@@ -119,29 +118,29 @@ return (
         </button>
     </div>
 
-    <div className="flex gap-20 justify-center w-120 border gap-10">
-
-    
-    <ul className="space-y-6">
-
+    <div className="flex gap-20 justify-center w-[480px] ">
+    <ul className="space-y-6 w-full">
         {produtos.map((produto) => (
-            <li  className="border p-4 mt-10 " key={produto.id}>
+            <li  className=" p-4 rounded-md w-full" key={produto.id}>
                 <div>Nome: {produto.nome}</div>
                 <div>Preço: {produto.preco}</div>
                 <div>Quantidade: {produto.quantidade}</div>
-                <div>Total: {produto.total}</div>
-
-                <button onClick={() => incrementar(produto.id)}>
+                <div>Total: R${produto.total}</div>
+                
+                <div className="flex gap-4 mt-3">
+                <button onClick={() => incrementar(produto.id)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded">
                     Incrementar
                 </button>
 
-                <button onClick={() => decrementar(produto.id)}>
+                <button onClick={() => decrementar(produto.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded">
                     Decrementar
                 </button>
+                </div>
             </li>
         ))}
     </ul>
     </div>
-
 </div>
 )}
