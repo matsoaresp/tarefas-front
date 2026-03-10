@@ -1,5 +1,4 @@
 'use client';
-import { setRequestMeta } from "next/dist/server/request-meta";
 import { useEffect, useState } from "react";
 
 interface Produto {
@@ -13,9 +12,9 @@ export function BoxForm() {
 
     const [nome, setNome] = useState("");
     const [quantidade, setQuantidade] = useState("");
-    const [filter, setFilter] = useState<"todos" | "comprado" | "pendente">("todos")
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const [busca, setBusca] = useState("");
+    const [isEditing, setIsEditing] = useState<number | null>(null);
     const totalProdutos = produtos.length;
     const totalBuy = produtos.filter((produto) => produto.comprado).length;
     const totalPending = produtos.filter((produto) => !produto.comprado).length;
@@ -63,6 +62,38 @@ export function BoxForm() {
         localStorage.setItem("produto", JSON.stringify(removeComprado))
     }
 
+    const handleUpdateProdutos = (id: number) => {
+
+        const produto = produtos.find((p) => p.id === id)
+
+        if (produto) {
+            setNome(produto.nome)
+            setQuantidade(produto.quantidade)
+            setIsEditing(id)
+        }
+    };
+
+    const handleSaveProducts = (id: number) => {
+        const updated = produtos.map((produto) =>
+            produto.id === id ? {...produto, nome, quantidade} : produto
+        );
+
+        setProdutos(updated)
+        localStorage.setItem("produto", JSON.stringify(updated));
+        setNome("")
+        setQuantidade("")
+        setIsEditing(null)
+    };
+
+    const handleSubmit = () => {
+
+        if (isEditing !== null) {
+            handleSaveProducts(isEditing)
+        }else {
+            handleAddProduct();
+        }
+    }
+
     useEffect(() => {
 
         const data = localStorage.getItem("produto");
@@ -70,6 +101,9 @@ export function BoxForm() {
             setProdutos(JSON.parse(data))
         }
     }, [])
+
+
+   
     return (
         <div className="flex justify-center flex-column">
             <div>
@@ -97,8 +131,8 @@ export function BoxForm() {
 
 
                     <button
-                        onClick={handleAddProduct}
-                    >Adicionar produto
+                        onClick={handleSubmit}
+                    >{isEditing !== null ? "Atualizar produto" : "Adicionar produto"}
                     </button>
                 </div>
                 <ul>
@@ -134,6 +168,14 @@ export function BoxForm() {
                                         type="button"
                                         onClick={() => removeProduct(produto.id)}
                                     >Remover</button>
+                                </div>
+
+                                <div>
+                                    <button
+                                    type="button"
+                                    onClick={() => handleUpdateProdutos(produto.id)}
+                                    >
+                                    Atualizar</button>
                                 </div>
                             </div>
                         </li>
