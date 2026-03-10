@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 interface Produto {
     id:number;
     nome: string;
-    quantidade: number;
+    quantidade: string;
     comprado: boolean;
 }
 
 export function BoxForm () {
 
     const [nome, setNome] = useState("");
-    const [quantidade, setQuantidade] = useState<number>(0);
+    const [quantidade, setQuantidade] = useState("");
     const [filter, setFilter] = useState<"todos" | "comprado" | "pendente">("todos")
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const totalProdutos  = produtos.length;
@@ -21,22 +21,18 @@ export function BoxForm () {
 
     const handleAddProduct = () => {
 
-        if (!nome.trim()) {
-            alert("Digite o nome do produto")
+        if (!nome.trim() ||!quantidade.trim()) {
+            alert("Digite o nome e quantidade do produto")
             return;
         }
-        if (quantidade <= 0 ){
-            alert("Digite a quantidade do produto corretamente")
-            return;
-        }       
-
+           
         const newProduct = [
             ...produtos,
             {id: Date.now(), nome: nome.trim(), quantidade: quantidade, comprado: false},
         ];
 
         setNome("");
-        setQuantidade(0);
+        setQuantidade("");
         setProdutos(newProduct);
         localStorage.setItem("produto", JSON.stringify(newProduct));
     }
@@ -57,6 +53,13 @@ export function BoxForm () {
         setProdutos(updated)
     }
 
+    const removerComprados = () => {
+        const  removeComprado = produtos.filter((item) => !item.comprado)
+
+        setProdutos(removeComprado)
+        localStorage.setItem("produto", JSON.stringify(removeComprado))
+    }
+
     useEffect(() => {
 
             const data = localStorage.getItem("produto");
@@ -70,7 +73,7 @@ export function BoxForm () {
             <div>
             <label htmlFor="">Nome do produto</label>
             <input 
-            placeholder="Adicione um produto" 
+            placeholder=" Adicione um produto" 
             value={nome}
             onChange={(e) => setNome(e.target.value)} 
             type="text" 
@@ -81,10 +84,10 @@ export function BoxForm () {
             <div>
             <label htmlFor="">Quantidade</label>
             <input 
-            placeholder="Informe a quantidade" 
-            onChange={(e) => setQuantidade(Number(e.target.value))}
+            placeholder=" Informe a quantidade" 
+            onChange={(e) => setQuantidade(e.target.value)}
             value={quantidade}
-            type="number" />  
+            type="text" />  
             </div>  
 
             <button
@@ -95,34 +98,31 @@ export function BoxForm () {
             
             <li
             key={item.id}>  
-                    <div className="flex flex-col">
+                    <div className="flex flex-row gap-6">
                     <span>
-                        {item.nome}
+                        Nome: {item.nome}
                     </span>
 
                     <span>
-                        {item.quantidade}
+                        Quantidade: {item.quantidade}
                     </span>
-                    </div> 
 
-                    <div>
-                       <input 
+                     <input 
                        type="checkbox"
                         checked= {item.comprado}
                         onChange={()=> handleCompleted(item.id)}
                        />
-                    </div>
-
-                    <div>
+                       <div>
                     <button
                     type="button"
                     onClick={() => removeProduct(item.id)}
                     >Remover</button>
                     </div>
+                    </div>
             </li>
             )}
             </ul>
-            <div>
+            <div className="flex gap-4 mt-20">
                 <span>Total: {totalProdutos}</span>
                 <span>Comprados: {totalBuy}</span>
                 <span>Pendentes: {totalPending}</span>
@@ -131,4 +131,3 @@ export function BoxForm () {
         </div>
     )
 }
-
