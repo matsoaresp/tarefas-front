@@ -15,11 +15,11 @@ export function ComprasForm () {
     const [nome, setNome] = useState("");
     const [preco, setPreco] = useState(0);
     const [quantidade, setQuantidade] = useState(0);
+    const [isEditing, setIsEditing] = useState<number | null>(null)
     const [produtos, setProdutos] = useState<Produto[]>([]);
 
 
     const incrementar = (id: number) => {
-        
         const updated = produtos.map((produto) => 
             produto.id === id ? {
                 ...produto,
@@ -42,11 +42,46 @@ export function ComprasForm () {
             }
             :
             produto
-            
         )
         setProdutos(updated);
         localStorage.setItem("produto", JSON.stringify(updated));
     }
+
+    const handleUpdateProduct = (id: number) => {
+
+        const produto = produtos.find((p) => p.id === id)
+
+        if (produto) {
+            setNome(produto.nome)
+            setPreco(produto.preco)
+            setQuantidade(produto.quantidade)
+            setIsEditing(id)
+        }
+    }
+
+    const handleSave = (id: number) => {
+
+        const updated = produtos.map((produto) => 
+            produto.id === id ? {...produto, nome,preco,quantidade} : produto
+        );
+
+        setProdutos(updated);
+        setNome("");
+        setPreco(0);
+        setQuantidade(0);
+        setIsEditing(null);
+        toast.success("Produto atualizado")
+    };
+
+    const handleSubmit = () => {
+
+        if (isEditing !== null) {
+            handleSave(isEditing);
+        }else {
+            handleAddProduct();
+        }
+    }
+
 
     const handleAddProduct = () => {
 
@@ -79,6 +114,13 @@ export function ComprasForm () {
             setProdutos(JSON.parse(data))
         }
     }, [])
+
+    useEffect(() => {
+        localStorage.setItem("produto", JSON.stringify(produtos))
+
+    }, [produtos])
+
+    
 return (
 
 <div className="flex flex-col items-center">
@@ -114,34 +156,39 @@ return (
             />
         </div>
 
-        <button onClick={handleAddProduct} className="bg-green-500 rounded-md px-4 py-2 w-40 font-bold">
-            Adicionar
+       
+
+        <button className="bg-green-500 rounded-md px-4 py-2 w-40 font-bold"
+            onClick={handleSubmit}>
+            {isEditing ? "Salvar" : "Adicionar"}
         </button>
     </div>
 
-    <div className="flex gap-20 justify-center w-120 border gap-10">
-
-    
-    <ul className="space-y-6">
-
+    <div className="flex gap-20 justify-center w-[480px] ">
+    <ul className="space-y-6 w-full">
         {produtos.map((produto) => (
-            <li  className="border p-4 mt-10 " key={produto.id}>
+            <li  className=" p-4 rounded-md w-full" key={produto.id}>
                 <div>Nome: {produto.nome}</div>
                 <div>Preço: {produto.preco}</div>
                 <div>Quantidade: {produto.quantidade}</div>
-                <div>Total: {produto.total}</div>
-
-                <button onClick={() => incrementar(produto.id)}>
+                <div>Total: R${produto.total}</div>
+                
+                <div className="flex gap-4 mt-3">
+                <button onClick={() => incrementar(produto.id)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded">
                     Incrementar
                 </button>
 
-                <button onClick={() => decrementar(produto.id)}>
+                <button onClick={() => decrementar(produto.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded">
                     Decrementar
                 </button>
+
+                <button onClick={() => handleUpdateProduct(produto.id)}>Atualizar</button>
+                </div>
             </li>
         ))}
     </ul>
     </div>
-
 </div>
 )}
