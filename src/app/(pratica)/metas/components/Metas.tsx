@@ -19,7 +19,7 @@ export function Metas() {
   const [horasMetas, setHorasMetas] = useState("");
 
   const handleAddMeta = () => {
-    if (!nome.trim() || !descricao.trim()) {
+    if (!nome.trim() || !descricao.trim() || !horasMetas.trim() || !horasAtuais.trim()) {
       toast.error("Preencha todos os campos");
       return;
     }
@@ -29,7 +29,7 @@ export function Metas() {
       nome: nome.trim(),
       descricao: descricao.trim(),
       horasAtuais: Number(horasAtuais) || 0,
-      horasMetas: Number(horasMetas) || 0
+      horasMetas: Number(horasMetas) || 0,
     };
 
     const novasMetas = [...metas, novaMeta];
@@ -45,11 +45,20 @@ export function Metas() {
     setHorasMetas("");
   };
 
+  const updateProgress = (id: number) => {
+
+    const meta = metas.find((m) => m.id === id)
+
+    if (meta) {
+        setHorasAtuais(meta.horasAtuais.toString())
+    }
+  }
+
   const handleRemove = (id: number) => {
 
     const remove = metas.filter((meta) => meta.id !== id)
     setMetas(remove)
-    localStorage.setItem("produto", JSON.stringify(remove))
+    localStorage.setItem("metas", JSON.stringify(remove))
   }
 
   useEffect(() => {
@@ -108,6 +117,7 @@ export function Metas() {
               <p>Descrição: {meta.descricao}</p>
               <p>Progresso: {progresso.toFixed(0)}%</p>
               <button onClick={() => handleRemove(meta.id)} >Remover</button>
+              <button onClick={() => updateProgress(meta.id)} >Atualizar</button>
             </li>
           );
         })}
