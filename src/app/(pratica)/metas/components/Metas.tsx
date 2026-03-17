@@ -45,6 +45,13 @@ export function Metas() {
     setHorasMetas("");
   };
 
+  const handleRemove = (id: number) => {
+
+    const remove = metas.filter((meta) => meta.id !== id)
+    setMetas(remove)
+    localStorage.setItem("produto", JSON.stringify(remove))
+  }
+
   useEffect(() => {
     const data = localStorage.getItem("metas");
     if (data) {
@@ -100,6 +107,7 @@ export function Metas() {
               <p>Nome: {meta.nome}</p>
               <p>Descrição: {meta.descricao}</p>
               <p>Progresso: {progresso.toFixed(0)}%</p>
+              <button onClick={() => handleRemove(meta.id)} >Remover</button>
             </li>
           );
         })}
