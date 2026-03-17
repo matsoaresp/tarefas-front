@@ -13,9 +13,9 @@ export function ListaDinamica (){
 
     const handleAdd = () => {
 
-        if (!nome){
+        if (!nome.trim()){
             toast.error("Adicione um item")
-            return
+            return;
         }
 
        const newItem  = [ 
@@ -23,22 +23,23 @@ export function ListaDinamica (){
         {name: nome.trim()}
     ]
 
+        setItem(newItem)
         setNome("")
     }
 
     return  (
         <div>
-            <input type="text" />
+            <input type="text" value={nome} onChange={(e) => setNome(e.target.value)}/>
             <button
             onClick={handleAdd}
-            ></button>
+            >Insira um item</button>
 
             <ul>
-                {item.map((itens) => (
-                    <li>
-                        <div>
+                {item.map((itens, index) => (
+                    <li key={index}>
+        
                             Nome: {itens.name}
-                        </div>
+                        
                     </li>
                 ))}
                 

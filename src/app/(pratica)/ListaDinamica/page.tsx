@@ -1,8 +1,7 @@
 'use client';
-import { useState } from "react";
-import { toast } from "sonner";
+import { ListaDinamica } from "./components/ListaDimanica";
 
-export default function ListaDinamica (){   
+export default function Page (){   
 
     
     return  (
