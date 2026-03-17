@@ -16,6 +16,7 @@ export function ComprasForm () {
     const [preco, setPreco] = useState(0);
     const [quantidade, setQuantidade] = useState(0);
     const [isEditing, setIsEditing] = useState<number | null>(null)
+    const [busca, setBusca] = useState("")
     const [produtos, setProdutos] = useState<Produto[]>([]);
 
 
@@ -82,6 +83,17 @@ export function ComprasForm () {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    const revomeProduct = (id: number) => {
+
+        const remove = produtos.filter(p => (p.id !== id))
+        setProdutos(remove)
+
+
+    }
+
+>>>>>>> Stashed changes
 
     const handleAddProduct = () => {
 
@@ -169,7 +181,7 @@ return (
         {produtos.map((produto) => (
             <li  className=" p-4 rounded-md w-full" key={produto.id}>
                 <div>Nome: {produto.nome}</div>
-                <div>Preço: {produto.preco}</div>
+                <div>Preço: R${produto.preco}</div>
                 <div>Quantidade: {produto.quantidade}</div>
                 <div>Total: R${produto.total}</div>
                 
