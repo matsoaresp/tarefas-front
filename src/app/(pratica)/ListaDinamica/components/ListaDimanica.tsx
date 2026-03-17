@@ -3,8 +3,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
     interface Itens {
-        
+        id:number;
         name: string;
+        purchased?: boolean
     }
 export function ListaDinamica (){   
 
@@ -20,26 +21,36 @@ export function ListaDinamica (){
 
        const newItem  = [ 
         ...item,
-        {name: nome.trim()}
+        {id: Date.now(), name: nome.trim()}
     ]
 
         setItem(newItem)
         setNome("")
     }
 
+    const removeItem = (id: number) => {
+
+        const remove = item.filter(p => (p.id !== id))
+        setItem(remove)
+    }
+
     return  (
         <div>
             <input type="text" value={nome} onChange={(e) => setNome(e.target.value)}/>
+
+            <div>
             <button
             onClick={handleAdd}
             >Insira um item</button>
+            
+            </div>
 
             <ul>
-                {item.map((itens, index) => (
-                    <li key={index}>
+                {item.map((itens) => (
+                    <li key={itens.id}>
         
-                            Nome: {itens.name}
-                        
+                        Nome: {itens.name}
+                        <button onClick={() =>removeItem (itens.id)}>Remover item</button>
                     </li>
                 ))}
                 
