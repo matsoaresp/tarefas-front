@@ -83,8 +83,6 @@ export function ComprasForm () {
         }
     }
 
-<<<<<<< Updated upstream
-=======
     const revomeProduct = (id: number) => {
 
         const remove = produtos.filter(p => (p.id !== id))
@@ -93,7 +91,6 @@ export function ComprasForm () {
 
     }
 
->>>>>>> Stashed changes
 
     const handleAddProduct = () => {
 
