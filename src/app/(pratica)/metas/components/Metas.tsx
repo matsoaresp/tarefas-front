@@ -54,6 +54,18 @@ export function Metas() {
     }
   }
 
+  const handleSaveMeta  = (id: number) => {
+
+    const updated = metas.map((meta) => 
+    meta.id === id ? { ...meta, horasAtuais: Number(horasAtuais) || 0} : meta)
+
+     setMetas(updated)
+     localStorage.setItem("metas", JSON.stringify(updated))
+     setHorasAtuais("")
+  }
+
+ 
+
   const handleRemove = (id: number) => {
 
     const remove = metas.filter((meta) => meta.id !== id)
@@ -102,6 +114,8 @@ export function Metas() {
       <button onClick={handleAddMeta}>
         Adicionar Meta
       </button>
+
+      
       </div>
 
       <ul className="flex flex-col gap-2">
@@ -118,6 +132,9 @@ export function Metas() {
               <p>Progresso: {progresso.toFixed(0)}%</p>
               <button onClick={() => handleRemove(meta.id)} >Remover</button>
               <button onClick={() => updateProgress(meta.id)} >Atualizar</button>
+              <button onClick={() => handleSaveMeta(meta.id)}>
+        Salvar Meta
+      </button>
             </li>
           );
         })}
