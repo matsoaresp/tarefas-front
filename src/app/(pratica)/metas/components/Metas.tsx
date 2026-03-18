@@ -81,9 +81,11 @@ export function Metas() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-        <div className="flex flex-col gap-2 w-[400px]">
+    <div className="flex justify-center items-center min-h-screen gap-15">
+        <div className="flex flex-col gap-8 w-[400px]">
+
       <input
+       className="px-4 py-4 text-lg h-14 rounded-md bg-white border border-gray-400 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-xl placeholder:text-xl"
         type="text"
         placeholder="Nome"
         value={nome}
@@ -91,31 +93,33 @@ export function Metas() {
       />
 
       <input
+      className="px-4 py-4 text-lg h-14 rounded-md bg-white border border-gray-400 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-xl placeholder:text-xl" 
         type="text"
         placeholder="Descrição"
         value={descricao}
         onChange={(e) => setDescricao(e.target.value)}
       />
 
-      <input
-        type="number"
-        placeholder="Horas atuais"
-        value={horasAtuais}
-        onChange={(e) => setHorasAtuais(e.target.value)}
-      />
+     <div className="flex gap-4">
+  <input
+    className="flex-1 px-4 py-4 text-lg rounded-md border  border-gray-400 w-full focus:outline-none placeholder:text-xl placeholder:text-xl placeholder:black-gray-500 focus:ring-2 focus:ring-blue-500"
+    type="text"
+    placeholder="Horas atuais"
+    value={horasAtuais}
+    onChange={(e) => setHorasAtuais(e.target.value)}
+  />
+  <input
+    className="flex-1 px-4 py-4 h-14 text-lg rounded-md border border-gray-400 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-xl placeholder:text-xl"
+    type="text"
+    placeholder="Horas meta"
+    value={horasMetas}
+    onChange={(e) => setHorasMetas(e.target.value)}
+  />
+</div>
 
-      <input
-        type="number"
-        placeholder="Horas meta"
-        value={horasMetas}
-        onChange={(e) => setHorasMetas(e.target.value)}
-      />
-
-      <button onClick={handleAddMeta}>
-        Adicionar Meta
-      </button>
-
-      
+      <button className="bg-blue-500 text-white font-semibold py-3 rounded-md hover:bg-blue-600 transition-colors">
+  Adicionar Meta
+</button>      
       </div>
 
       <ul className="flex flex-col gap-2">
