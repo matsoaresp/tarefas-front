@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -51,17 +50,32 @@ export function Metas() {
 
     if (meta) {
         setHorasAtuais(meta.horasAtuais.toString())
+        setHorasMetas(meta.horasMetas.toString())
     }
   }
 
   const handleSaveMeta  = (id: number) => {
 
     const updated = metas.map((meta) => 
-    meta.id === id ? { ...meta, horasAtuais: Number(horasAtuais) || 0} : meta)
+    meta.id === id ? { ...meta, horasAtuais: Number(horasAtuais) || 0, horasMetas: Number(horasMetas) || 0} : meta)
 
      setMetas(updated)
      localStorage.setItem("metas", JSON.stringify(updated))
-     setHorasAtuais("")
+     setHorasAtuais("");
+     setHorasMetas("");
+  }
+
+
+  const handleMeta = (id: number) => {
+
+    const meta = metas.find((m) => m.id === id)
+
+    if(meta){
+      setNome(meta.nome)
+      setDescricao(meta.descricao)
+      setHorasAtuais(meta.horasAtuais.toString())
+      setHorasMetas(meta.horasMetas.toString())
+    }
   }
 
  
@@ -87,7 +101,7 @@ export function Metas() {
       <input
        className="px-4 py-4 text-lg h-14 rounded-md bg-white border border-gray-400 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-xl placeholder:text-xl"
         type="text"
-        placeholder="Nome"
+        placeholder="Tarefa"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
       />
@@ -130,15 +144,17 @@ export function Metas() {
           );
 
           return (
-            <li key={meta.id}>
+            <li key={meta.id} onClick={() => handleMeta(meta.id)} className="cursor-pointer">
               <p>Nome: {meta.nome}</p>
               <p>Descrição: {meta.descricao}</p>
               <p>Progresso: {progresso.toFixed(0)}%</p>
-              <button onClick={() => handleRemove(meta.id)} >Remover</button>
-              <button onClick={() => updateProgress(meta.id)} >Atualizar</button>
-              <button onClick={() => handleSaveMeta(meta.id)}>
+              <div className="flex gap-4">
+              <button className="bg-red-500 cursor-pointer text-white w-30 font-semibold py-3 rounded-md hover:bg-red-700 transition-colors" onClick={() => handleRemove(meta.id)} >Remover</button>
+              <button className="bg-yellow-500 cursor-pointer text-white w-30 font-semibold py-3 rounded-md hover:bg-yellow-600 transition-colors" onClick={() => updateProgress(meta.id)} >Atualizar</button>
+              <button className="bg-green-500 cursor-pointer text-white w-40 font-semibold py-3 rounded-md hover:bg-green-600 transition-colors" onClick={() => handleSaveMeta(meta.id)}>
         Salvar Meta
       </button>
+      </div>
             </li>
           );
         })}
