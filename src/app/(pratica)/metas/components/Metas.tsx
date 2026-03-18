@@ -147,6 +147,7 @@ export function Metas() {
               <p>Progresso: {progresso.toFixed(0)}%</p>
               <div className="flex gap-4">
               <button className="bg-red-500 cursor-pointer text-white w-30 font-semibold py-3 rounded-md hover:bg-red-700 transition-colors" onClick={(e) => { e.stopPropagation(); handleRemove(meta.id)}} >Remover</button>
+              <button className="bg-yellow-500 cursor-pointer text-white w-30 font-semibold py-3 rounded-md hover:bg-yellow-700 transition-colors" onClick={(e) => { e.stopPropagation(); updateProgress(meta.id)}} >Atualizar</button>
               <button className="bg-green-500 cursor-pointer text-white w-40 font-semibold py-3 rounded-md hover:bg-green-600 transition-colors" onClick={(e) =>  { e.stopPropagation(); handleSaveMeta(meta.id)}}>
         Salvar Meta
       </button>
